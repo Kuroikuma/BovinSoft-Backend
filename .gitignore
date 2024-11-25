@@ -2,6 +2,7 @@
 .env
 venv/
 virtualenv/
+backend/
 
 # Ignorar archivos y directorios generados por Python
 *.pyc
