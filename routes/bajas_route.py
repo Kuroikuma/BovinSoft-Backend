@@ -3,27 +3,41 @@ from controllers.jwt import validar_token
 from configs.conecction import collections
 from controllers.bajas_controller import (
     insertar_baja,
-    mostrar_bajas
+    mostrar_bajas,
+    mostrar_todas_bajas,
+    actualizar_baja,
+    eliminar_baja
 )
 
-# Inicializando rutas
 bajas_route = Blueprint('bajas_routes', __name__)
 
-# validando token
+##validando token
 @bajas_route.before_request
 def verificar_token():
     try:
         token = request.headers['Authorization'].split(" ")[1]
         validar_token(token, output=False)
     except:
-        return jsonify({"Mensaje": "Error de autenticacion, no esta autorizado"})
+        return jsonify({"Mensaje":"Error de autenticacion, no estas autorizado"})
 
-# ruta crear bajas
+
+# Rutas para Bajas
 @bajas_route.route('/bajas', methods=['POST'])
-def insertar_tratamiento_route():
+def crear_baja():
     return insertar_baja(collections('bajas'))
 
-# ruta mostrar bajas
-@bajas_route.route('/bajas/',methods=["GET"])
-def obtener_reproduccion_id_route(id):
+@bajas_route.route('/bajas/<id>', methods=['GET'])
+def obtener_baja(id):
     return mostrar_bajas(collections('bajas'), id)
+
+@bajas_route.route('/bajas', methods=['GET'])
+def obtener_todas_bajas():
+    return mostrar_todas_bajas(collections('bajas'))
+
+@bajas_route.route('/bajas/<id>', methods=['PUT'])
+def modificar_baja(id):
+    return actualizar_baja(collections('bajas'), id)
+
+@bajas_route.route('/bajas/<id>', methods=['DELETE'])
+def borrar_baja(id):
+    return eliminar_baja(collections('bajas'), id)
