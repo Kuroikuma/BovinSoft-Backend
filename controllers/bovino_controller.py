@@ -77,7 +77,8 @@ def obtener_bovinosByUser(finca_collection, ganado_collection, id_usuario):
         
         # Obtener todas las fincas del usuario
         fincas = finca_collection.find({"idUsuario": id_usuario})
-        finca_ids = [doc_finca["_id"] for doc_finca in fincas]
+        finca_list = list(fincas)
+        finca_ids = [doc_finca["_id"] for doc_finca in finca_list]
         
         # Comprobar si se encontraron fincas
         if not finca_ids:
@@ -94,11 +95,12 @@ def obtener_bovinosByUser(finca_collection, ganado_collection, id_usuario):
             return jsonify({"message": "No se encontraron bovinos para el usuario."}), 404
         
         for doc_ganado in bovinos_list:
-            fincaNombre = fincas.find_one({"_id": ObjectId(doc_ganado['fincaId'])})['nombre']
+            finca_id = doc_ganado['fincaId']
+            fincaNombre = next((finca for finca in finca_list if finca['_id'] == finca_id), None)
             bovino = BovinoModel(doc_ganado).__dict__
             bovino['_id'] = str(doc_ganado['_id'])
             bovino['fincaId'] = str(doc_ganado['fincaId'])
-            bovino['fincaNombre'] = fincaNombre
+            bovino['fincaNombre'] = fincaNombre["nombre"]
             bovinos.append(bovino)
 
         return jsonify(bovinos), 200
