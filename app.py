@@ -15,6 +15,8 @@ from routes.historialSalud import historialSalud_routes
 from routes.tratamiento_route import tratamiento_routes
 from routes.foro_routes import foro_routes
 from routes.comentario_routes import comentario_routes
+from routes.reproduccion_route import reproduccion_route
+from blueprints.reproductive_event.routes import reproductive_event_blueprint
 # from routes.ia_route import gemini_routes
 
 ##inicializando servidor
@@ -38,7 +40,9 @@ app.register_blueprint(bovino_routes)
 app.register_blueprint(tratamiento_routes)
 app.register_blueprint(foro_routes)
 app.register_blueprint(comentario_routes)
+app.register_blueprint(reproduccion_route)
 # app.register_blueprint(gemini_routes)
+app.register_blueprint(reproductive_event_blueprint, url_prefix="/reproductive_events")
 
 if __name__ == '__main__':
     app.run(debug=DEBUG, port=PORT)

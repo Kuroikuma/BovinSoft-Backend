@@ -22,7 +22,7 @@ def verificar_token():
 
 # ruta crear reproduccion
 @reproduccion_route.route('/reproduccion', methods=['POST'])
-def insertar_tratamiento_route():
+def insertar_reproduccion_route():
     return insertar_reproduccion(collections('reproduccion'))
 
 # ruta mostrar por id
