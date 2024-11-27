@@ -20,7 +20,7 @@ def insertar_finca(collections):
 def clasificar_ganado(fecha_nacimiento, genero: str) -> str:
     # Verificar si fecha_nacimiento es un string y convertirlo a datetime
     if isinstance(fecha_nacimiento, str):
-        fecha_nacimiento_dt = datetime.strptime(fecha_nacimiento, '%d-%m-%Y')
+        fecha_nacimiento_dt = datetime.strptime(fecha_nacimiento, '%Y-%m-%d')
     elif isinstance(fecha_nacimiento, datetime):
         fecha_nacimiento_dt = fecha_nacimiento
     else:
