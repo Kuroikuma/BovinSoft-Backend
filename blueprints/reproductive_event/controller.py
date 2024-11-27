@@ -108,7 +108,10 @@ def get_reproductive_by_finca_id(db, finca_id):
         events_by_reproductive[reproductive_id].append(event)
     
     for reproduccione in reproductives:
+            
             event_by_reproductive = events_by_reproductive.get(reproduccione['_id'], {})
+            if not event_by_reproductive:
+              event_by_reproductive = []
             reproduccione["events"] = event_by_reproductive
             reproduccione["name"] = next((bovino for bovino in bovinos if bovino['_id'] == reproduccione['bovinoId']), None)['nombre']
             reproduccione["bovinoId"] = str(reproduccione["bovinoId"])
