@@ -85,3 +85,33 @@ def get_event_by_bovino_id(db, bovino_id):
             reproduccione["name"] = bovino["nombre"]
             
     return jsonify(reproducciones), 200
+  
+def get_reproductive_by_finca_id(db, finca_id):
+    """Obtiene todos los eventos reproductivos de una finca"""
+    event_model = ReproductiveEvent(db)
+    bovinos = event_model.get_bovino_by_finca_id(finca_id)
+    reproductives = event_model.get_reproductive_by_bovino_ids([bovino['_id'] for bovino in bovinos])
+    
+    for reproduccion in reproductives:
+      reproduccion["_id"] = str(reproduccion["_id"])
+      reproduccion["id"] = str(reproduccion["_id"])
+    
+    events = event_model.get_event_by_reproductive_ids([reproductive['_id'] for reproductive in reproductives])
+    
+    events_by_reproductive = {}
+    for event in events:
+        event["_id"] = str(event["_id"])
+        event["id"] = str(event["_id"])
+        reproductive_id = event["reproductiveId"]
+        if reproductive_id not in events_by_reproductive:
+                events_by_reproductive[reproductive_id] = []
+        events_by_reproductive[reproductive_id].append(event)
+    
+    for reproduccione in reproductives:
+            event_by_reproductive = events_by_reproductive.get(reproduccione['_id'], {})
+            reproduccione["events"] = event_by_reproductive
+            reproduccione["name"] = next((bovino for bovino in bovinos if bovino['_id'] == reproduccione['bovinoId']), None)['nombre']
+            reproduccione["bovinoId"] = str(reproduccione["bovinoId"])
+    
+        
+    return jsonify(reproductives), 200	

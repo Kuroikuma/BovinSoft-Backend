@@ -8,7 +8,8 @@ from .controller import (
     get_events_by_reproductive_id,
     update_event,
     delete_event,
-    get_event_by_bovino_id
+    get_event_by_bovino_id,
+    get_reproductive_by_finca_id
 )
 
 # Crear Blueprint
@@ -45,3 +46,7 @@ def delete(event_id):
 @reproductive_event_blueprint.route("/bovino/<bovino_id>", methods=["GET"])
 def get_event_by_bovino_id_route(bovino_id):
     return get_event_by_bovino_id(collections, bovino_id)
+  
+@reproductive_event_blueprint.route("/finca/<finca_id>", methods=["GET"])
+def get_event_by_finca_id_route(finca_id):
+    return get_reproductive_by_finca_id(collections, finca_id)

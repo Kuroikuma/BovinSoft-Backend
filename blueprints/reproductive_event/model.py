@@ -45,6 +45,14 @@ class ReproductiveEvent:
         """Obtiene todos las reproducciones de un bovino"""
         return list(self.collectionReproductives.find({"bovinoId": ObjectId(bovino_id)}))
       
+    def get_reproductive_by_bovino_ids(self, bovino_ids):
+        """Obtiene todos las reproducciones de varios bovinos"""
+        return list(self.collectionReproductives.find({"bovinoId": {"$in": bovino_ids}}))
+      
     def get_event_by_reproductive_ids(self, ids):
         """Obtiene todos los eventos reproductivos de un ganado específico por cattleId"""
         return list(self.collection.find({"reproductiveId": {"$in": ids}}))
+      
+    def get_bovino_by_finca_id(self, finca_id):
+        """Obtiene todos los bovinos de una finca"""
+        return list(self.collectionBovinos.find({"fincaId": ObjectId(finca_id)}))
