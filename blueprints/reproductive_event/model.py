@@ -44,6 +44,9 @@ class ReproductiveEvent:
     def get_reproductive_by_bovino_id(self, bovino_id):
         """Obtiene todos las reproducciones de un bovino"""
         return list(self.collectionReproductives.find({"bovinoId": ObjectId(bovino_id)}))
+    def get_reproductive_by_id(self, id):
+        """Obtiene la reproducciones por id"""
+        return self.collectionReproductives.find_one({"_id": ObjectId(id)})
       
     def get_reproductive_by_bovino_ids(self, bovino_ids):
         """Obtiene todos las reproducciones de varios bovinos"""
@@ -56,3 +59,9 @@ class ReproductiveEvent:
     def get_bovino_by_finca_id(self, finca_id):
         """Obtiene todos los bovinos de una finca"""
         return list(self.collectionBovinos.find({"fincaId": ObjectId(finca_id)}))
+      
+    def update_bovino(self, bovino_id, updates):
+        """Actualiza un bovino por ID"""
+        return self.collectionBovinos.update_one(
+            {"_id": ObjectId(bovino_id)}, {"$set": updates}
+        )

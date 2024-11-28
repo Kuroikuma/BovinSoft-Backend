@@ -7,6 +7,18 @@ def create_event(db):
     data = request.get_json()
     event_model = ReproductiveEvent(db)
     result = event_model.create(data)
+    
+    reproductive = event_model.get_reproductive_by_id(data["reproductiveId"])
+    bovino = event_model.get_bovino_by_id(reproductive["bovinoId"])
+    
+    if(data["type"] == "parturition"):
+      bovino["estadoSalud"] = "lactancia"
+      event_model.update_bovino(bovino["_id"], bovino)
+    else:
+      if(data["type"] == "gestation"):
+        bovino["estadoSalud"] = "embarazada"
+        event_model.update_bovino(bovino["_id"], bovino)
+    
     return jsonify({"message": "Evento creado", "id": str(result.inserted_id)}), 201
 
 def create_many_events(db):
