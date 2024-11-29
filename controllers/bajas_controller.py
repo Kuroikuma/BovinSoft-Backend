@@ -1,12 +1,12 @@
 from flask import request, jsonify
 from bson import ObjectId
-from models.bajas import Bajas
+from models.bajas import CalendarioCuidados
 
 # Insertar baja
 def insertar_baja(collection):
     try:
         data = request.get_json()
-        baja = Bajas(
+        baja = CalendarioCuidados(
             bovinoId=data['bovinoId'],
             fecha=data['fecha'],
             motivo=data.get('motivo')

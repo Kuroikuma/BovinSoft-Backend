@@ -2,7 +2,7 @@ from datetime import datetime
 from bson import ObjectId
 
 class CalendarioCuidados:
-    def __init__(self, bovinoId, fechaProgramada, actividad, descripcion=None, estado='Pendiente', costoEstimado=None):
+    def __init__(self, bovinoId,titulo, fechaProgramada, actividad, descripcion=None, estado='Pendiente', costoEstimado=None):
         self.bovinoId = ObjectId(bovinoId)  # ID del bovino
         self.fechaProgramada = fechaProgramada
         self.actividad = actividad
@@ -10,6 +10,8 @@ class CalendarioCuidados:
         self.estado = estado
         self.costoEstimado = costoEstimado
         self.fechaCreacion = datetime.now()  # Fecha de creación en UTC
+        self.titulo = titulo
+        self._id = ObjectId()
 
     def to_dict(self):
         return {
@@ -20,6 +22,7 @@ class CalendarioCuidados:
             "descripcion": self.descripcion,
             "estado": self.estado,
             "costoEstimado": self.costoEstimado,
-            "fechaCreacion": self.fechaCreacion
+            "fechaCreacion": self.fechaCreacion,
+            "titulo": self.titulo
         }
 #actividad ENUM('Vacunación', 'Desparasitación', 'Examen Médico', 'Parto', 'Monta', 'Otro') NOT NULL,

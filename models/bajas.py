@@ -1,7 +1,7 @@
 from datetime import datetime
 from bson import ObjectId
 
-class Bajas:
+class CalendarioCuidados:
     def __init__(self, bovinoId, fecha, motivo=None ):
         self.bovinoID = ObjectId(bovinoId) # Id del bovino
         self.fecha = fecha
