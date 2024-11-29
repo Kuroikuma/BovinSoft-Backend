@@ -93,6 +93,8 @@ def get_event_by_bovino_id(db, bovino_id):
     
     for reproduccione in reproducciones:
             event_by_reproductive = events_by_reproductive.get(reproduccione['_id'], {})
+            if not event_by_reproductive:
+              event_by_reproductive = []
             reproduccione["events"] = event_by_reproductive
             reproduccione["name"] = bovino["nombre"]
             
@@ -112,21 +114,20 @@ def get_reproductive_by_finca_id(db, finca_id):
     
     events_by_reproductive = {}
     for event in events:
-        event["_id"] = str(event["_id"])
-        event["id"] = str(event["_id"])
-        reproductive_id = event["reproductiveId"]
-        if reproductive_id not in events_by_reproductive:
-                events_by_reproductive[reproductive_id] = []
-        events_by_reproductive[reproductive_id].append(event)
+      event["_id"] = str(event["_id"])
+      event["id"] = str(event["_id"])
+      reproductive_id = event["reproductiveId"]
+      if reproductive_id not in events_by_reproductive:
+              events_by_reproductive[reproductive_id] = []
+      events_by_reproductive[reproductive_id].append(event)
     
-    for reproduccione in reproductives:
-            
-            event_by_reproductive = events_by_reproductive.get(reproduccione['_id'], {})
-            if not event_by_reproductive:
-              event_by_reproductive = []
-            reproduccione["events"] = event_by_reproductive
-            reproduccione["name"] = next((bovino for bovino in bovinos if bovino['_id'] == reproduccione['bovinoId']), None)['nombre']
-            reproduccione["bovinoId"] = str(reproduccione["bovinoId"])
+    for reproduccione in reproductives:         
+      event_by_reproductive = events_by_reproductive.get(reproduccione['_id'], {})
+      if not event_by_reproductive:
+        event_by_reproductive = []
+      reproduccione["events"] = event_by_reproductive
+      reproduccione["name"] = next((bovino for bovino in bovinos if bovino['_id'] == reproduccione['bovinoId']), None)['nombre']
+      reproduccione["bovinoId"] = str(reproduccione["bovinoId"])
     
         
     return jsonify(reproductives), 200	
