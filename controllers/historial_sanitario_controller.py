@@ -61,6 +61,8 @@ def actualizar_historial_sanitario(collection, id):
             actualizar_datos['veterinario'] = data['veterinario']
         if 'medicamento' in data:
             actualizar_datos['medicamento'] = data['medicamento']
+        if 'tipo' in data:
+            actualizar_datos['tipo'] = data['tipo']
 
         result = collection.update_one({"_id": ObjectId(id)}, {"$set": actualizar_datos})
 
