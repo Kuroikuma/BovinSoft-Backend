@@ -6,7 +6,9 @@ from controllers.historial_sanitario_controller import (
     mostrar_historial_sanitario,
     mostrar_todos_historiales_sanitarios,
     actualizar_historial_sanitario,
-    eliminar_historial_sanitario
+    eliminar_historial_sanitario,
+    mostrar_historial_sanitario_por_bovino_id,
+    mostrar_historial_sanitario_por_finca_id
 )
 
 historial_sanitario_route = Blueprint('historial_sanitario_routes', __name__)
@@ -40,3 +42,11 @@ def modificar_historial_sanitario(id):
 @historial_sanitario_route.route('/historial_sanitario/<id>', methods=['DELETE'])
 def borrar_historial_sanitario(id):
     return eliminar_historial_sanitario(collections('historial_sanitario'), id)
+
+@historial_sanitario_route.route('/historial_sanitario/bovino/<bovino_id>', methods=['GET'])
+def obtener_historial_sanitario_por_bovino_id(bovino_id):
+    return mostrar_historial_sanitario_por_bovino_id(collections('historial_sanitario'), collections('bovinos'), bovino_id)
+  
+@historial_sanitario_route.route('/historial_sanitario/finca/<finca_id>', methods=['GET'])
+def obtener_historial_sanitario_por_finca_id(finca_id):
+    return mostrar_historial_sanitario_por_finca_id(collections('historial_sanitario'), collections('bovinos'), finca_id)

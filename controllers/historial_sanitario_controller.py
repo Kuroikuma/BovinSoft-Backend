@@ -11,10 +11,15 @@ def insertar_historial_sanitario(collection):
             fecha=data['fecha'],
             descripcion=data['descripcion'],
             veterinario=data['veterinario'],
-            medicamento=data['medicamento']
+            medicamento=data['medicamento'],
+            tipo=data['tipo'],
         )
         historial_data = historial.to_dic()
         collection.insert_one(historial_data)
+        
+        historial_data['_id'] = str(historial_data['_id'])
+        historial_data['bovinoId'] = str(historial_data['bovinoId'])
+        
         return jsonify({"Mensaje": "Historial sanitario registrado exitosamente", "historial": historial_data}), 201
     except Exception as e:
         return jsonify({"Mensaje": str(e)}), 400
@@ -74,5 +79,64 @@ def eliminar_historial_sanitario(collection, id):
             return jsonify({"Mensaje": "Historial sanitario eliminado exitosamente"}), 200
         else:
             return jsonify({"Mensaje": "Historial sanitario no encontrado"}), 404
+    except Exception as e:
+        return jsonify({"Mensaje": str(e)}), 400
+      
+def mostrar_historial_sanitario_por_bovino_id(collection,collectionBovino, bovino_id):
+    try:
+        bovino = collectionBovino.find_one({"_id": ObjectId(bovino_id)})
+        if bovino is None:
+          return jsonify({"Mensaje": "Bovino no encontrado"}), 404
+        
+        historiales = collection.find({"bovinoId": ObjectId(bovino_id)})
+        historiales_list = []
+        
+        for historial in historiales:
+            historial['_id'] = str(historial['_id'])  # Convertir ObjectId a string
+            historial['bovinoId'] = str(historial['bovinoId'])  # Convertir ObjectId a string
+            historiales_list.append(historial)
+        
+        bovino['careHistory'] = historiales_list
+        bovino['_id'] = str(bovino['_id'])  # Convertir ObjectId a string
+        bovino['fincaId'] = str(bovino['fincaId'])  # Convertir ObjectId a string
+          
+        return jsonify({"historiales": bovino}), 200
+    except Exception as e:
+        return jsonify({"Mensaje": str(e)}), 400
+      
+def mostrar_historial_sanitario_por_finca_id(collection, collectionBovino, finca_id):
+    try:
+        bovinos_list = []
+        bovinos_ids = []
+        
+        bovinos = collectionBovino.find({"fincaId": ObjectId(finca_id)})
+        if bovinos is None:
+          return jsonify({"Mensaje": "Finca no encontrada"}), 404
+        
+        for item in bovinos:
+            bovinos_ids.append(item['_id'])
+            item['_id'] = str(item['_id'])  # Convertir ObjectId a string
+            item['fincaId'] = str(item['fincaId'])  # Convertir ObjectId a string
+            bovinos_list.append(item)
+            
+        
+        historiales = collection.find({"bovinoId": {"$in": bovinos_ids}})
+        
+        historiales_por_bovinos = {}
+        for historial in historiales:
+            historial['_id'] = str(historial['_id'])  # Convertir ObjectId a string
+            historial['bovinoId'] = str(historial['bovinoId'])  # Convertir ObjectId a string
+            bovino_id = historial["bovinoId"]
+            if bovino_id not in historiales_por_bovinos:
+                historiales_por_bovinos[bovino_id] = []
+            historiales_por_bovinos[bovino_id].append(historial)
+            
+        for bovino in bovinos_list:
+            historiales_por_bovino = historiales_por_bovinos.get(bovino['_id'], [])
+            bovino['careHistory'] = historiales_por_bovino
+            bovino['_id'] = str(bovino['_id'])  # Convertir ObjectId a string
+            bovino['fincaId'] = str(bovino['fincaId'])  # Convertir ObjectId a string 
+          
+        return jsonify({"historiales": bovinos_list}), 200
     except Exception as e:
         return jsonify({"Mensaje": str(e)}), 400
