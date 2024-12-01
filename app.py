@@ -24,6 +24,7 @@ from routes.lotes_route import lotes_route
 from routes.nutricion_route import nutricion_route
 from routes.propietario_route import propietario_route
 from routes.calendario_cuidado_route import calendario_cuidado_route
+from routes.premium_request_route import premium_request_route
 # from routes.ia_route import gemini_routes
 
 ##inicializando servidor
@@ -55,6 +56,7 @@ app.register_blueprint(lotes_route)
 app.register_blueprint(nutricion_route)
 app.register_blueprint(propietario_route)
 app.register_blueprint(calendario_cuidado_route)
+app.register_blueprint(premium_request_route)
 # app.register_blueprint(gemini_routes)
 app.register_blueprint(reproductive_event_blueprint, url_prefix="/reproductive_events")
 

@@ -1,0 +1,73 @@
+from flask import request, jsonify
+from bson import ObjectId
+from models.PremiumRequest import PremiumRequest
+
+# Insertar premium_request
+def insertar_premium_request(collection):
+    try:
+        data = request.get_json()
+        premium_request = PremiumRequest(
+            userId = data['userId'],
+            requestDate = data.get('requestDate'),
+            status = data['status'],
+        )
+        premium_request_data = premium_request.to_dict()
+        collection.insert_one(premium_request_data)
+        premium_request_data['_id'] = str(premium_request_data['_id'])
+        premium_request_data['userId'] = str(premium_request_data['userId'])
+        
+        return jsonify({"Mensaje": "premium_request registrada exitosamente", "premium_request": premium_request_data}), 201
+    except Exception as e:
+        return jsonify({"Mensaje": str(e)}), 400
+
+# Mostrar premium_requests
+def mostrar_premium_requests(collection, id):
+    try:
+        premium_request = collection.find_one({"_id": ObjectId(id)})
+        if premium_request:
+            return jsonify({"premium_request": premium_request}), 200
+        else:
+            return jsonify({"Mensaje": "premium_request no encontrada"}), 404
+    except Exception as e:
+        return jsonify({"Mensaje": str(e)}), 400
+
+# Mostrar todas las premium_requests
+def mostrar_todos_premium_requests(collection):
+    try:
+        premium_requests = collection.find()
+        premium_requests_list = []
+        for premium_request in premium_requests:
+            premium_request['_id'] = str(premium_request['_id'])  # Convertir ObjectId a string
+            premium_request['userId'] = str(premium_request['userId'])  # Convertir ObjectId a string
+            premium_requests_list.append(premium_request)
+        return jsonify({"premium_requests": premium_requests_list}), 200
+    except Exception as e:
+        return jsonify({"Mensaje": str(e)}), 400
+
+# Actualizar premium_request
+def actualizar_premium_request(collection, id):
+    try:
+        data = request.get_json()
+        actualizar_datos = {}
+        if 'status' in data:
+            actualizar_datos['status'] = data['status']
+
+        result = collection.update_one({"_id": ObjectId(id)}, {"$set": actualizar_datos})
+
+        if result.matched_count > 0:
+            return jsonify({"Mensaje": "premium_request actualizada exitosamente"}), 200
+        else:
+            return jsonify({"Mensaje": "premium_request no encontrada"}), 404
+    except Exception as e:
+        return jsonify({"Mensaje": str(e)}), 400
+
+# Eliminar premium_request
+def eliminar_premium_request(collection, id):
+    try:
+        result = collection.delete_one({"_id": ObjectId(id)})
+        if result.deleted_count > 0:
+            return jsonify({"Mensaje": "premium_request eliminada exitosamente"}), 200
+        else:
+            return jsonify({"Mensaje": "premium_request no encontrada"}), 404
+    except Exception as e:
+        return jsonify({"Mensaje": str(e)}), 400
