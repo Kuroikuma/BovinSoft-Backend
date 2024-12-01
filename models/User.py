@@ -17,3 +17,4 @@ class UserModel:
         self.update_at = data.get('update_at', datetime.now())
         self.fincaId = data.get('fincaId', '')
         self.pushToToken = data.get('pushToToken', '')
+        self.status = data.get('status', '')
