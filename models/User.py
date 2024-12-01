@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from bson import ObjectId
+
 ##modelo de objeto usuario
 class UserModel:
     def __init__(self, data):
@@ -18,3 +20,4 @@ class UserModel:
         self.fincaId = data.get('fincaId', None)
         self.pushToToken = data.get('pushToToken', None)
         self.status = data.get('status', '')
+        self._id = ObjectId(data.get('_id', None))
