@@ -35,7 +35,7 @@ def obtener_todos_premium_request():
 
 @premium_request_route.route('/premium_request/<id>', methods=['PUT'])
 def modificar_premium_request_id(id):
-    return actualizar_premium_request(collections('premium_request'), id)
+    return actualizar_premium_request(collections('premium_request'), id, collections('usuarios'))
 
 @premium_request_route.route('/premium_request/<id>', methods=['DELETE'])
 def borrar_premium_request_id(id):
