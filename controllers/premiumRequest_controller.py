@@ -62,6 +62,8 @@ def actualizar_premium_request(collection, id, collection_users):
         actualizar_datos = {}
         if 'status' in data:
             actualizar_datos['status'] = data['status']
+            actualizar_datos['responseDate'] = data['responseDate']
+            
         result = collection.update_one({"_id": ObjectId(id)}, {"$set": actualizar_datos})
         
         user = collection_users.find_one({"_id": ObjectId(data['userId'])})
