@@ -32,14 +32,23 @@ def mostrar_premium_requests(collection, id):
         return jsonify({"Mensaje": str(e)}), 400
 
 # Mostrar todas las premium_requests
-def mostrar_todos_premium_requests(collection):
+def mostrar_todos_premium_requests(collection, collection_users):
     try:
         premium_requests = collection.find()
         premium_requests_list = []
+        users_ids = []
         for premium_request in premium_requests:
-            premium_request['_id'] = str(premium_request['_id'])  # Convertir ObjectId a string
+            premium_request['_id'] = str(premium_request['_id'])
+            users_ids.append(premium_request['userId'])
             premium_request['userId'] = str(premium_request['userId'])  # Convertir ObjectId a string
             premium_requests_list.append(premium_request)
+        
+        users = list(collection_users.find({"_id": {"$in": users_ids}}))
+        
+        for premium_request_doc in premium_requests_list:
+          user = next((user for user in users if user['_id'] == ObjectId(premium_request_doc['userId'])), None)
+          premium_request_doc['userName'] = user['nombre']
+          premium_request_doc['userEmail'] = user['email']  
         return jsonify({"premium_requests": premium_requests_list}), 200
     except Exception as e:
         return jsonify({"Mensaje": str(e)}), 400

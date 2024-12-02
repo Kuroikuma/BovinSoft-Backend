@@ -31,7 +31,7 @@ def obtener_premium_request_id(id):
 
 @premium_request_route.route('/premium_request', methods=['GET'])
 def obtener_todos_premium_request():
-    return mostrar_todos_premium_requests(collections('premium_request'))
+    return mostrar_todos_premium_requests(collections('premium_request'), collections('usuarios'))
 
 @premium_request_route.route('/premium_request/<id>', methods=['PUT'])
 def modificar_premium_request_id(id):
