@@ -56,15 +56,20 @@ def mostrar_todos_premium_requests(collection, collection_users):
         return jsonify({"Mensaje": str(e)}), 400
 
 # Actualizar premium_request
-def actualizar_premium_request(collection, id):
+def actualizar_premium_request(collection, id, collection_users):
     try:
         data = request.get_json()
         actualizar_datos = {}
         if 'status' in data:
             actualizar_datos['status'] = data['status']
-
         result = collection.update_one({"_id": ObjectId(id)}, {"$set": actualizar_datos})
-
+        
+        user = collection_users.find_one({"_id": ObjectId(data['userId'])})
+        
+        if data['status'] == 'approved':
+            user['tipoSuscripcion'] = 'premium'
+            collection_users.update_one({"_id": ObjectId(data['userId'])}, {"$set": user})
+            
         if result.matched_count > 0:
             return jsonify({"Mensaje": "premium_request actualizada exitosamente"}), 200
         else:
