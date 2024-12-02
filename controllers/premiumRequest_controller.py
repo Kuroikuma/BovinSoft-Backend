@@ -39,6 +39,7 @@ def mostrar_todos_premium_requests(collection, collection_users):
         users_ids = []
         for premium_request in premium_requests:
             premium_request['_id'] = str(premium_request['_id'])
+            premium_request['id'] = str(premium_request['id'])
             users_ids.append(premium_request['userId'])
             premium_request['userId'] = str(premium_request['userId'])  # Convertir ObjectId a string
             premium_requests_list.append(premium_request)
