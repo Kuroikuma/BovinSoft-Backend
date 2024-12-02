@@ -45,6 +45,8 @@ def mostrar_todos_premium_requests(collection, collection_users):
         
         users = list(collection_users.find({"_id": {"$in": users_ids}}))
         
+        print("hola")
+        
         for premium_request_doc in premium_requests_list:
           user = next((user for user in users if user['_id'] == ObjectId(premium_request_doc['userId'])), None)
           premium_request_doc['userName'] = user['nombre']
