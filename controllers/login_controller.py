@@ -126,7 +126,6 @@ def login(collections):
         user_doc["_id"] = str(user_doc['_id'])
         user_doc["create_at"] = str(user_doc['create_at'])
         user_doc["update_at"] = str(user_doc['update_at'])
-        user_doc['updatedAt'] = str(user_doc['updatedAt'])
         
         user_data = {
             "id": str(user_doc['_id']),

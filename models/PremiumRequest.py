@@ -5,6 +5,7 @@ class PremiumRequest:
     def __init__(self, userId, status, requestDate):
         self.userId = ObjectId(userId)  # ID del bovino
         self.requestDate = requestDate
+        self.responseDate = None
         self.status = status
         self._id = ObjectId()
 
@@ -13,5 +14,6 @@ class PremiumRequest:
             "_id": self._id,
             "userId": self.userId,
             "requestDate": self.requestDate,
-            "status": self.status
+            "status": self.status,
+            "responseDate": self.responseDate
         } 
