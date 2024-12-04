@@ -100,7 +100,7 @@ def signin(collections):
             "tipoSuscripcion": user_instace.tipoSuscripcion
         }
         token = crear_token(data=user_instace.__dict__)
-        enviar_correo_verificacion(user_instace.email, user_instace.nombre, user_instace.apellido)
+        # enviar_correo_verificacion(user_instace.email, user_instace.nombre, user_instace.apellido)
         return jsonify({'id':str(id), "token":token.decode('utf-8')})
 
     except Exception as x:
